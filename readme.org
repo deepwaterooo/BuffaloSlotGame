@@ -1,0 +1,6 @@
+#+latex_class: cn-article
+#+title: BuffaloSlotGame Design and Implementation
+#+author: deepwaterooo
+
+* Updates
+- initial clone trial of casino buffalo slot game, starting point. needs more thought and redesign the project for design and implementation practice
