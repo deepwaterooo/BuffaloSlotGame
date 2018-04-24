@@ -3,4 +3,5 @@
 #+author: deepwaterooo
 
 * Updates
+- StrangeIoC framework starting point
 - initial clone trial of casino buffalo slot game, starting point. needs more thought and redesign the project for design and implementation practice
