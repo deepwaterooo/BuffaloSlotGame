@@ -2,9 +2,9 @@
 
 public interface IScore {
 
-    int Score {
+    float Score {
         get;
     }
 
-    int AddScore(int value);
+    float AddScore(float value);
 }

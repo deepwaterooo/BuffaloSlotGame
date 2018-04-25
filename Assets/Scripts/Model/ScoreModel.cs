@@ -2,9 +2,9 @@
 
 public class ScoreModel : IScore {
 
-    private int _score;
+    private float _score;
 
-    public int Score {
+    public float Score {
         get {
             return _score;
         }
@@ -14,7 +14,7 @@ public class ScoreModel : IScore {
         _score = 0;
     }
 
-    public int AddScore(int value) {
+    public float AddScore(float value) {
         _score += value;
         return Score;
     }

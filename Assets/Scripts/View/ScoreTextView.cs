@@ -9,10 +9,7 @@ public class ScoreTextView : View {
     public const string SCORE_CHANGE = "SCORE_CHANGE";
 
     [Inject]
-    public IEventDispatcher dispatcher {
-        get;
-        set;
-    }
+    public IEventDispatcher dispatcher { get; set; }
 
     private Text scoreText;
 
@@ -21,7 +18,7 @@ public class ScoreTextView : View {
         scoreText.text = "0";
     }
 
-    public void ChangeScoreText(int score) {
+    public void ChangeScoreText(float score) {
         scoreText.text = score.ToString();
     }
 }

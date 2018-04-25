@@ -11,8 +11,8 @@ public class ChangeScoreCommand : EventCommand {
     public IScore Score { get; set; }
 
     public override void Execute() {
-        int value = (int)evt.data;
-        int newScore = Score.AddScore(value);
+        float value = (float)evt.data;
+        float newScore = Score.AddScore(value);
         Debug.Log("Add Score: " + newScore);
     }
 }
