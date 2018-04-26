@@ -13,19 +13,26 @@ public class SlotsContext : MVCSContext {
     protected override void mapBindings() {
         base.mapBindings();
 
-        injectionBinder.Bind<IScore>().To<ScoreModel>().ToSingleton(); // 单例模式
-        injectionBinder.Bind<StartSpin>().ToSingleton();               // 单例模式
-        injectionBinder.Bind<StopSpin>().ToSingleton();                // 单例模式
 
-        mediationBinder.Bind<LeverView>().To<LeverMediator>();
+        injectionBinder.Bind<IScore>().To<ScoreModel>().ToSingleton();    // 单例模式
+        injectionBinder.Bind<ICredit>().To<CreditModel>().ToSingleton();  // 单例模式
+        
+        injectionBinder.Bind<StartSpin>().ToSingleton();               
+        injectionBinder.Bind<StopSpin>().ToSingleton();                
+
+        mediationBinder.Bind<LeverView>().To<LeverMediator>();         // 中介者模式
         mediationBinder.Bind<SlotView>().To<SlotMediator>();
-        mediationBinder.Bind<ScoreTextView>().To<ScoreTextMediator>();  // 中介者模式
+        mediationBinder.Bind<ScoreTextView>().To<ScoreTextMediator>(); 
+        mediationBinder.Bind<CreditTextView>().To<CreditTextMediator>(); 
         mediationBinder.Bind<SlotObjectView>().To<SlotObjectMediator>();
         
-        //mediationBinder.Bind<MainUIView>().To<MainUIViewMediator>();
+        mediationBinder.Bind<MainUIView>().To<MainUIViewMediator>();
 
+        //commandBinder.Bind<AddScoreSignal>().To<ChangeScoreCommand>().Pooled; // should not work for control
         commandBinder.Bind(Events.CHANGE_SCORE).To<ChangeScoreCommand>();
-        //commandBinder.Bind(NotificationCenter.SPIN).To<SpinCommand>();
-        //commandBinder.Bind(NotificationCenter.VOLUMN).To<VolumnCommand>();        
+        commandBinder.Bind(Events.CHANGE_CREDIT).To<ChangeCreditCommand>();
+
+        commandBinder.Bind(NotificationCenter.SPIN).To<SpinCommand>();
+        commandBinder.Bind(NotificationCenter.VOLUMN).To<VolumnCommand>();        
     }
 }

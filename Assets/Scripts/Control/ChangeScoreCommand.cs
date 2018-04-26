@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using strange.extensions.context.api;
 using strange.extensions.command.impl;
-using strange.extensions.dispatcher.eventdispatcher.impl;
 
 public class ChangeScoreCommand : EventCommand {
 
@@ -13,6 +12,6 @@ public class ChangeScoreCommand : EventCommand {
     public override void Execute() {
         float value = (float)evt.data;
         float newScore = Score.AddScore(value);
-        Debug.Log("Add Score: " + newScore);
+        Debug.Log("Add Score: " + value);
     }
 }

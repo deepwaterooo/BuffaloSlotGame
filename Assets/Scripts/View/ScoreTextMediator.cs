@@ -5,7 +5,8 @@ using strange.extensions.mediation.impl;
 using strange.extensions.dispatcher.eventdispatcher.impl;
 
 public class ScoreTextMediator : EventMediator {
-
+    private const string TAG = "ScoreTextView";
+    
     [Inject]
     public ScoreTextView view { get; set; }
     [Inject]
@@ -27,6 +28,7 @@ public class ScoreTextMediator : EventMediator {
     }
 
     private void ScoreChanged() {
-        view.ChangeScoreText(score.Score); // score.Score() NO!!!  public int Score {}  in ScoreModel.cs
+        Debug.Log(TAG + ": ScoreChanged() score.Score: " + score.Score); 
+        view.ChangeScoreText(score.Score); 
     }
 }

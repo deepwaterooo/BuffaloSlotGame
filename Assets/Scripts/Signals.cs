@@ -1,10 +1,11 @@
 ﻿using System;
 using strange.extensions.signal.impl;
 
-public class StartSpin : Signal {
-    
-}
+//public class AddScoreSignal : Signal { }
 
-public class StopSpin : Signal {
-    
-}
+public class StartSpin : Signal { }
+
+public class StopSpin : Signal { }
+
+//public class SetSlotObjectsSignal : Signal { }
+

@@ -1,6 +1,4 @@
-﻿using System;
-
-public interface IScore {
+﻿public interface IScore {
 
     float Score {
         get;
