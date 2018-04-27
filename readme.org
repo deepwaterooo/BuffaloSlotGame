@@ -3,5 +3,8 @@
 #+author: deepwaterooo
 
 * Updates
+- Try to figure out a way how to calculate score. So far GUI interface finished most of the design for main game interface, free game interface is still needs to work on. 
+
+  [[./pic/snapshot.png]]
 - StrangeIoC framework starting point
 - initial clone trial of casino buffalo slot game, starting point. needs more thought and redesign the project for design and implementation practice
