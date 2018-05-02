@@ -12,7 +12,7 @@ public class CreditTextMediator : EventMediator {
     public CreditTextView view { get; set; }
     [Inject]
     public StopSpin StopSpin { get; set; }
- 
+    
     [Inject]
     public ICredit credit { get; set; }
 

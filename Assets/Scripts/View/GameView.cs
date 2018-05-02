@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.mediation.impl;
+using strange.extensions.signal.impl;
 
 public class GameView : View {
     public const string TAG = "GameView";
@@ -20,6 +21,18 @@ public class GameView : View {
     string [,] board;
     int resIdx;
 
+    public Signal spinButtonClicked = new Signal();
+    private Rect buttonRect = new Rect(400, 400, 600, 600);
+
+    public void OnGUI() {
+        if (GUI.Button(buttonRect, "newSPIN")) {
+            Debug.Log(TAG + ": onGUI() bef spinButtonClicked.Dispatch()"); 
+            spinButtonClicked.Dispatch();
+            Debug.Log(TAG + ": onGUI() aft spinButtonClicked.Dispatch()"); 
+        }
+    }
+
+    
     public float WinScore {
         get {
             float newScore = winScore;

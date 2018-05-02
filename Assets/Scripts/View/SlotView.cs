@@ -12,7 +12,7 @@ public class SlotView : View {
     public const string STOP_SPIN = "STOP_SPIN";
 
     public float time = 5f;
-    public float speed;
+    public float speed = 12f;
     public int slotObjCount = 6;
     public List<GameObject> slots;
     
@@ -94,6 +94,7 @@ public class SlotView : View {
 
     IEnumerator Spin() {
         float curentSpeed = speed; // Random.Range(speed * 0.8f, speed * 1.2f); // 这里暂时还不需要随机速度
+        
         Canvas canvas = FindObjectOfType<Canvas>();
         if (currentSlotObj.Count < slotObjCount) 
             PlaceSlotObject(new Vector3(transform.position.x, currentSlotObj[currentSlotObj.Count - 1].transform.position.y + currentSlotObj[currentSlotObj.Count - 1].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor));
@@ -101,11 +102,9 @@ public class SlotView : View {
             int count = currentSlotObj.Count;
             if (currentSlotObj.Count < slotObjCount) 
                 PlaceSlotObject(new Vector3(transform.position.x, currentSlotObj[currentSlotObj.Count - 1].transform.position.y + currentSlotObj[currentSlotObj.Count - 1].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor));
-            if (currentSlotObj[currentSlotObj.Count - 1].transform.position.y <= transform.position.y + currentSlotObj[currentSlotObj.Count - 1].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor) 
-                PlaceSlotObject(new Vector3(transform.position.x, currentSlotObj[currentSlotObj.Count - 1].transform.position.y + currentSlotObj[currentSlotObj.Count - 1].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor));
             for (int i = 0; i < count; i++) {
                 Vector3 newPos = new Vector3(currentSlotObj[i].transform.position.x, currentSlotObj[i].transform.position.y - currentSlotObj[i].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor);
-                currentSlotObj[i].transform.position = Vector3.Lerp(currentSlotObj[i].transform.position, newPos, curentSpeed * Time.fixedDeltaTime);
+                currentSlotObj[i].transform.position = Vector3.Lerp(currentSlotObj[i].transform.position, newPos, curentSpeed * Time.fixedDeltaTime); 
             }
             if (currentSlotObj[0].transform.position.y <= transform.position.y - currentSlotObj[0].GetComponent<RectTransform>().sizeDelta.y * 1.0f * canvas.scaleFactor) { // 1.5f
                 Destroy(currentSlotObj[0]);
@@ -118,30 +117,39 @@ public class SlotView : View {
     }
 
     IEnumerator SpinResult(float slowSpeed) {
+        float curentSpeed = speed; 
         int count = currentSlotObj.Count;
-        for (int i = 0; i < currentSlotObj.Count; i++) {
+        /*for (int i = 0; i < currentSlotObj.Count; i++) {
             res[resIdx++] = currentSlotObj[i].name.Substring(0, 3);
             //Debug.Log(TAG + ": SpinResult() currentSlotObj[i].name: " + currentSlotObj[i].name); 
             //Debug.Log(TAG + ": SpinResult() currentSlotObj[i].GetComponent<SlotObjectView>().reward: " + currentSlotObj[i].GetComponent<SlotObjectView>().reward); 
-        }
+        }*/
         Canvas canvas = FindObjectOfType<Canvas>();
         while (currentSlotObj[0].transform.position.y > transform.position.y) { // ori currentSlotObj.Count - 2
-            if (slowSpeed > speed * 0.5f) 
-                slowSpeed *= 0.98f; // slowSpeed *= 0.98f;
+        //while (currentSlotObj[0].transform.position.y > transform.position.y + currentSlotObj[0].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor) { // ori currentSlotObj.Count - 2
+            //if (slowSpeed > speed * 0.5f) 
+                //slowSpeed *= 0.98f; // slowSpeed *= 0.98f;
             for (int i = 0; i < count; i++) {
                 Vector3 newPos = new Vector3(currentSlotObj[i].transform.position.x, currentSlotObj[i].transform.position.y - currentSlotObj[i].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor);
+                currentSlotObj[i].transform.position = Vector3.Lerp(currentSlotObj[i].transform.position, newPos, curentSpeed * Time.fixedDeltaTime);
+            }
+            yield return new WaitForEndOfFrame();
+        }    
+        while (currentSlotObj[0].transform.position.y <= transform.position.y) { //  + currentSlotObj[0].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor
+            //currentSlotObj[0].transform.position = transform.position;
+            if (slowSpeed > speed * 0.5f) 
+                slowSpeed *= 0.6f; // slowSpeed *= 0.98f;
+            for (int i = 0; i < count; i++) {
+                Vector3 newPos = new Vector3(transform.position.x, transform.position.y + currentSlotObj[i].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor * i);                
                 currentSlotObj[i].transform.position = Vector3.Lerp(currentSlotObj[i].transform.position, newPos, slowSpeed * Time.fixedDeltaTime);
             }
             yield return new WaitForEndOfFrame();
-        }
-        //currentSlotObj[0].transform.position = transform.position;
-        for (int i = 0; i < count; i++) {
-            Vector3 newPos = new Vector3(transform.position.x, transform.position.y + currentSlotObj[i].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor * i);                
-            currentSlotObj[i].transform.position = newPos;
-        }
+        }  
+        
         //winScore = currentSlotObj[0].GetComponent<SlotObjectView>().reward;
         //winScore = getWinScore();
-        StartCoroutine(getWinScore());
+        //StartCoroutine(getWinScore());
+        getWinScore();
         
         //Debug.Log(TAG + ": SpinResult() currentSlotObj[0].name: " + currentSlotObj[0].name); 
         //Debug.Log(TAG + ": SpinResult() currentSlotObj[0].GetComponent<SlotObjectView>().reward: " + currentSlotObj[0].GetComponent<SlotObjectView>().reward); 
@@ -156,7 +164,7 @@ public class SlotView : View {
     bool firstSlot = true;
     float bet = 0.75f; // for temp, needs to be passed in
     
-    IEnumerator getWinScore() {
+    void getWinScore() {
         // 1st Slot: add all first slot items into set, keep winRecDic empty;
         // 2nd Slot: winRecDic.Count = 0, add candidates into winRecDic;
         // 3rd slot: update all win items in winRecDic, remove item from winItemsSet if no longer illegible for win
@@ -164,6 +172,9 @@ public class SlotView : View {
 
         //int winItemsCnt = slotObjCount - 1;
         //float winVal = 0;
+        Debug.Log(TAG + ": getWinScore() firstSlot: " + firstSlot);
+        Debug.Log("winRec.Count: " + winRec.Count);
+        
         if (firstSlot) { // 1st slot
             for (int i = 0; i < slotObjCount - 1; i++) {
                 if (winItems.ContainsKey(res[i]))
@@ -204,14 +215,14 @@ public class SlotView : View {
             }
             winScore = 10f;
         }
-        yield return winScore; //WaitForSeconds(1);
+        //yield return winScore; //WaitForSeconds(1);
     }
     
     void UpdateWinItems() {
         Debug.Log(TAG + ": UpdateWinItems() "); 
         Debug.Log("currentSlotObj.Count: " + currentSlotObj.Count);
         Debug.Log("slotObjCount: " + slotObjCount);
-        int tmp = currentSlotObj.Count - 2; // slotObjCount
+        int tmp = slotObjCount - 1; // slotObjCount
         int cnt;
         foreach (string key in winRec.Keys) {
             cnt = 0;
