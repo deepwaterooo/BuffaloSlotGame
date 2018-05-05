@@ -6,7 +6,7 @@ using strange.extensions.command.impl;
 
 public class ChangeScoreCommand : EventCommand {
 
-    [Inject]
+    [Inject("ScoreModel")]
     public IScore Score { get; set; }
 
     public override void Execute() {

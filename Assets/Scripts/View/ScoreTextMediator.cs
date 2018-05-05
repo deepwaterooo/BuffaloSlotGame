@@ -11,7 +11,7 @@ public class ScoreTextMediator : EventMediator {
     public ScoreTextView view { get; set; }
     [Inject]
     public StopSpin StopSpin { get; set; }
-    [Inject]
+    [Inject("ScoreModel")]
     public IScore score { get; set; }
 
     public override void OnRegister() {

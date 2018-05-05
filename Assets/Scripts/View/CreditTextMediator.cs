@@ -13,8 +13,8 @@ public class CreditTextMediator : EventMediator {
     [Inject]
     public StopSpin StopSpin { get; set; }
     
-    [Inject]
-    public ICredit credit { get; set; }
+    [Inject("CreditModel")]
+    public IScore credit { get; set; }
 
     public override void OnRegister() {
         UpdateListeners(true);
@@ -31,6 +31,6 @@ public class CreditTextMediator : EventMediator {
 
     private void CreditChanged() {
         //Debug.Log(TAG + ": CreditChanged() credit.Credit: " + credit.Credit); 
-        view.ChangeCreditText(credit.Credit);  // credit.Credit
+        view.ChangeCreditText(credit.Score);  // credit.Credit
     }    
 }

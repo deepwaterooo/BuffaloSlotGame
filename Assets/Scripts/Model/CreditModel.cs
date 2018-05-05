@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreditModel : ICredit {
-
+//public class CreditModel : ICredit {
+public class CreditModel : IScore{
+    
     private float _score;
 
-    public float Credit {
+    public float Score {
         get {
             return _score;
         }
@@ -17,8 +18,8 @@ public class CreditModel : ICredit {
         _score = 0f;
     }
 
-    public float AddCredit(float value) {
+    public float AddScore(float value) {
         _score += value;
-        return Credit;
+        return Score;
     }
 }

@@ -22,16 +22,15 @@ public class GameView : View {
     int resIdx;
 
     public Signal spinButtonClicked = new Signal();
-    private Rect buttonRect = new Rect(400, 400, 600, 600);
+    private Rect buttonRect = new Rect(560, 465, 50, 50); // 510, 465, 50, 50
 
     public void OnGUI() {
-        if (GUI.Button(buttonRect, "newSPIN")) {
+        if (GUI.Button(buttonRect, "SPIN")) { // newSPIN
             Debug.Log(TAG + ": onGUI() bef spinButtonClicked.Dispatch()"); 
             spinButtonClicked.Dispatch();
             Debug.Log(TAG + ": onGUI() aft spinButtonClicked.Dispatch()"); 
         }
     }
-
     
     public float WinScore {
         get {

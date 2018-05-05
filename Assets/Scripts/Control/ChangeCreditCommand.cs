@@ -7,11 +7,12 @@ using strange.extensions.dispatcher.eventdispatcher.impl;
 
 public class ChangeCreditCommand : EventCommand {
 
-    [Inject]
-    public ICredit Credit { get; set; }
+    [Inject("CreditModel")]
+    public IScore Credit { get; set; }
 
     public override void Execute() {
         float value = (float)evt.data;
-        float newCredit = Credit.AddCredit(value);
+        //float newCredit = Credit.AddCredit(value);
+        float newCredit = Credit.AddScore(value); // AddCredit()
     }
 }
