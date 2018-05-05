@@ -5,7 +5,7 @@ using strange.extensions.mediation.impl;
 using strange.extensions.dispatcher.eventdispatcher.impl;
 
 public class ScoreTextMediator : EventMediator {
-    private const string TAG = "ScoreTextView";
+    private const string TAG = "ScoreTextMediator";
     
     [Inject]
     public ScoreTextView view { get; set; }

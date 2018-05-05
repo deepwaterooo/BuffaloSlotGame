@@ -16,8 +16,8 @@ public class GameViewInitiateCommand : Command {
         Debug.Log(TAG + ": Execute() ");
 
         // initiate BetView: Bet buttons, 0.75, 1.5, 2.25, 3, 3.75
-        GameObject test = new GameObject("BetViews");
-        test.AddComponent<BetView>();
+        GameObject test = new GameObject("BetButtonsViews");
+        test.AddComponent<BetButtonsView>();
         test.transform.SetParent(contextView.transform);
 /*
         // initiate SpinView: SPIN button

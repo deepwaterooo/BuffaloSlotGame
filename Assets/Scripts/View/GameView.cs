@@ -22,7 +22,7 @@ public class GameView : View {
     int resIdx;
 
     public Signal spinButtonClicked = new Signal();
-    private Rect buttonRect = new Rect(560, 465, 50, 50); // 510, 465, 50, 50
+    private Rect buttonRect = new Rect(580, 465, 50, 50); // 510, 465, 50, 50
 
     public void OnGUI() {
         if (GUI.Button(buttonRect, "SPIN")) { // newSPIN
@@ -40,13 +40,6 @@ public class GameView : View {
             GameBoard();
             
             return newScore;
-        }
-    }
-    public float BetCreditCost {
-        get {
-            float newBetCost = betCreditCost * (-1f); // cost
-            betCreditCost = 0f;
-            return newBetCost;
         }
     }
 

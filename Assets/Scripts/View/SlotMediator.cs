@@ -13,12 +13,12 @@ public class SlotMediator : EventMediator {
     public StartSpin StartSpin { get; set; }
     [Inject]
     public StopSpin StopSpin { get; set; }
-
+/*
     [Inject]
     public CHANGE_SCORE_Signal change_score_signal { get; set; }
     [Inject]
     public CHANGE_CREDIT_Signal change_credit_signal { get; set; }
-
+    */
     public override void OnRegister() {
         UpdateListeners(true);
         view.Init();
@@ -34,10 +34,8 @@ public class SlotMediator : EventMediator {
     }
     
     private void OnSpinStop() {
-        //dispatcher.Dispatch(change_score_signal, view.WinScore); // Events.CHANGE_SCORE
-        //dispatcher.Dispatch(change_credit_signal, view.WinCredit); // Events.CHANGE_CREDIT, solve this one after redesigned structure
-        change_score_signal.Dispatch(view.WinScore);
-        change_credit_signal.Dispatch(view.WinCredit);
+        dispatcher.Dispatch(Events.CHANGE_SCORE, view.WinScore);  //Events.CHANGE_SCORE
+        dispatcher.Dispatch(Events.CHANGE_CREDIT, view.WinCredit);  //Events.CHANGE_CREDIT, solve this one after redesigned structure
         StopSpin.Dispatch();
     }
 

@@ -14,8 +14,6 @@ public class SlotsGameContext : SlotsContext {
 
         commandBinder.Bind<StartSignal>().To<GameViewInitiateCommand>().Once(); // execute only once
         commandBinder.Bind<SpinSignal>().To<SpinCommand>().Pooled();
-        commandBinder.Bind<BetSignal>().To<BetCommand>(); //.Pooled();
-        commandBinder.Bind<UpdateBetSignal>().To<UpdateBetCommand>(); //.Pooled();
         
         injectionBinder.Bind<IBet>().To<BetModel>().ToSingleton();    
         //injectionBinder.Bind<IScore>().To<ScoreModel>().ToSingleton();    
@@ -23,14 +21,16 @@ public class SlotsGameContext : SlotsContext {
         injectionBinder.Bind<IScore>().To<ScoreModel>().ToName("ScoreModel");
         injectionBinder.Bind<IScore>().To<CreditModel>().ToName("CreditModel");
         
-        injectionBinder.Bind<StartSpin>().ToSingleton();  //             
+        injectionBinder.Bind<StartSpin>().ToSingleton();  
         injectionBinder.Bind<StopSpin>().ToSingleton();                
-        injectionBinder.Bind<CHANGE_SCORE_Signal>().ToSingleton();  
-        injectionBinder.Bind<CHANGE_CREDIT_Signal>().ToSingleton();                
+        injectionBinder.Bind<UpdateBetSignal>().ToSingleton();                
+        //injectionBinder.Bind<CHANGE_SCORE_Signal>().ToSingleton();  
+        //injectionBinder.Bind<CHANGE_CREDIT_Signal>().ToSingleton();                
         
         mediationBinder.Bind<LeverView>().To<LeverMediator>();            
         mediationBinder.Bind<SlotView>().To<SlotMediator>();
-        mediationBinder.Bind<BetView>().To<BetMediator>();   // BetView: Bet buttons
+        mediationBinder.Bind<BetButtonsView>().To<BetButtonsMediator>();   // BetButtonsView: BetButtons buttons
+        mediationBinder.Bind<BetView>().To<BetMediator>();   // BetView: Bet 
         mediationBinder.Bind<GameView>().To<GameMediator>(); // SpinView
         
         mediationBinder.Bind<ScoreTextView>().To<ScoreTextMediator>(); 

@@ -20,7 +20,6 @@ public class SlotView : View {
     public IEventDispatcher dispatcher { get; set; }
 
     float winScore;
-    //float betCreditCost = 0.75f; // 0.75f so far, need to figure out how to inject and get the value from button array???
 
     int index;
 
@@ -37,17 +36,7 @@ public class SlotView : View {
             return newScore;
         }
     }
-    /*
-    float betCreditCost = 0.75f; // 0.75f so far, need to figure out how to inject and get the value from button array???
-    public float BetCreditCost {
-        get {
-            float newBetCredit = betCreditCost / 25.0f * (-1f); // cost ???
-            //betCreditCost = 0f;
-            Debug.Log(TAG + ": BetCreditCredit newBetCredit: " + newBetCredit); 
-            return newBetCredit;
-        }
-    }
-    */
+
     public float WinCredit {
         get {
             float newScore = winScore;
