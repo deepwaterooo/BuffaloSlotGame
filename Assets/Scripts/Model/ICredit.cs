@@ -4,5 +4,5 @@
         get;
     }
 
-    float AddCredit(float value);
+    void AddCredit(float value);
 }

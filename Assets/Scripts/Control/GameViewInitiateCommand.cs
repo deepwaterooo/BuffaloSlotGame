@@ -11,20 +11,6 @@ public class GameViewInitiateCommand : Command {
     [Inject(ContextKeys.CONTEXT_VIEW)]
     public GameObject contextView { get; set; }
     
-    
     public override void Execute() {
-        Debug.Log(TAG + ": Execute() ");
-
-        // initiate BetView: Bet buttons, 0.75, 1.5, 2.25, 3, 3.75
-        GameObject test = new GameObject("BetButtonsViews");
-        test.AddComponent<BetButtonsView>();
-        test.transform.SetParent(contextView.transform);
-/*
-        // initiate SpinView: SPIN button
-        GameObject spin = new GameObject("SpinView");
-        spin.AddComponent<SpinView>();
-        spin.transform.SetParent(contextView.transform);
-        */
-        
     }
 }

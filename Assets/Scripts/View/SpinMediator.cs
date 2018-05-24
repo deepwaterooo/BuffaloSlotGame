@@ -1,19 +1,20 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using strange.extensions.dispatcher.eventdispatcher.impl;
 using strange.extensions.mediation.impl;
-using strange.extensions.signal.impl;
+using UnityEngine.EventSystems;
 
-public class LeverMediator : EventMediator {
-    private const string TAG = "LeverMediator";
-
+public class SpinMediator : Mediator {
+    private const string TAG = "SpinMediator";
+    
     [Inject]
-    public LeverView view { get; set; }
+    public SpinView view { get; set; }
     [Inject]
     public StartSpin StartSpin { get; set; }
+    //public SpinSignal Spin { get; set; }
     [Inject]
     public StopSpin StopSpin { get; set; }
-
+    
     public override void OnRegister() {
         UpdateListeners(true);
         view.Init();
@@ -24,18 +25,17 @@ public class LeverMediator : EventMediator {
     }
 
     private void UpdateListeners(bool value) {
-        view.dispatcher.UpdateListener(value, LeverView.RELEASE_EVENT, OnViewRelease);
-
+        //view.dispatcher.UpdateListener(value, SpinView.Click_Event, OnSpinClicked);
+        view.spinButtonClicked.AddListener(OnSpinClicked);
         StopSpin.AddListener(OnSpinStop);
     }
 
-    private void OnViewRelease() {
+    private void OnSpinClicked() { 
         UpdateListeners(false);
-        dispatcher.Dispatch(Events.CHANGE_CREDIT, view.BetCreditCost); // not working as expected     
         StartSpin.Dispatch();
     }
 
-    public void OnSpinStop() {
+    private void OnSpinStop() {
         OnRegister();
     }
 }

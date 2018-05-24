@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class ScoreModel : IScore {
-
+    private const string TAG = "ScoreModel";
+    
     private float _score;
 
     public float Score {
@@ -14,8 +18,8 @@ public class ScoreModel : IScore {
         _score = 0;
     }
 
-    public float AddScore(float value) {
+    public void AddScore(float value) {
         _score += value;
-        return Score;
+        //Debug.Log(TAG + ": AddScore() Score: " + Score); 
     }
 }

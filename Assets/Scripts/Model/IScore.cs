@@ -4,5 +4,5 @@
         get;
     }
 
-    float AddScore(float value);
+    void AddScore(float value);
 }

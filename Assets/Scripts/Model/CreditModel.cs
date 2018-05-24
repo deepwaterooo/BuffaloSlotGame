@@ -4,22 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //public class CreditModel : ICredit {
-public class CreditModel : IScore{
+public class CreditModel : ICredit{
+    private const string TAG = "CreditModel";
     
-    private float _score;
+    private float _credit;
 
-    public float Score {
+    public float Credit {
         get {
-            return _score;
+            return _credit;
         }
     }
 
     public CreditModel() {
-        _score = 0f;
+        _credit = 0f;
     }
 
-    public float AddScore(float value) {
-        _score += value;
-        return Score;
+    public void AddCredit(float value) {
+        _credit += value;
+        //Debug.Log(TAG + ": AddCredit() _credit: " + _credit); 
     }
 }

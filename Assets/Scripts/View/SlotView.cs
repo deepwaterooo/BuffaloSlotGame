@@ -4,8 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.mediation.impl;
+using strange.extensions.signal.impl;
 
 public class SlotView : View {
+    //public static float spinTimer = 4.0f;
+    public int spinFinished = 0;
+    
     private const string TAG = "SlotView";
     
     public const string START_SPIN = "START_SPIN";
@@ -18,46 +22,19 @@ public class SlotView : View {
     
     [Inject]
     public IEventDispatcher dispatcher { get; set; }
-
-    float winScore;
-
+    [Inject]
+    public StopSpin StopSpin { get; set; }
+    
     int index;
 
-    string [] res;
-    string [,] board;
-    int resIdx;
-    
-    List<GameObject> currentSlotObj;
+    public List<GameObject> currentSlotObj;
 
-    public float WinScore {
-        get {
-            float newScore = winScore;
-            winScore = 0;
-            return newScore;
-        }
-    }
-
-    public float WinCredit {
-        get {
-            float newScore = winScore;
-            winScore = 0;
-            return newScore;
-        }
-    }
-    
     public void Init() {
-        res = new string[26];
-        board = new string[5, 5];
-        //betCreditCost = 0.75f;
-        resIdx = 0;
-        winItems = new Dictionary<string, int>();
-        winRec = new Dictionary<string, List<int>>();
-        
         index = 0;
+        spinFinished = 0;
         currentSlotObj = new List<GameObject>();
         Canvas canvas = FindObjectOfType<Canvas>();
         slots = slots.OrderBy(r => Random.value).ToList();
-        //Debug.Log(TAG + ": Init() gameObject: " + gameObject);  // Slot2(UnityEngine.GameObject)
         for (int j = 0; j < slotObjCount; j++) {
             if (j == 0) 
                 PlaceSlotObject(transform.position);
@@ -77,12 +54,11 @@ public class SlotView : View {
     } 
 
     public void StartSpin() {
-        firstSlot = true;
         StartCoroutine(Spin());
     }
 
     IEnumerator Spin() {
-        float curentSpeed = speed; // Random.Range(speed * 0.8f, speed * 1.2f); // 这里暂时还不需要随机速度
+        float curentSpeed = speed; // Random.Range(speed * 0.8f, speed * 1.2f); 
         
         Canvas canvas = FindObjectOfType<Canvas>();
         if (currentSlotObj.Count < slotObjCount) 
@@ -108,13 +84,11 @@ public class SlotView : View {
     IEnumerator SpinResult(float slowSpeed) {
         float curentSpeed = speed; 
         int count = currentSlotObj.Count;
-        /*for (int i = 0; i < currentSlotObj.Count; i++) {
-            res[resIdx++] = currentSlotObj[i].name.Substring(0, 3);
-            //Debug.Log(TAG + ": SpinResult() currentSlotObj[i].name: " + currentSlotObj[i].name); 
-            //Debug.Log(TAG + ": SpinResult() currentSlotObj[i].GetComponent<SlotObjectView>().reward: " + currentSlotObj[i].GetComponent<SlotObjectView>().reward); 
-        }*/
+        //for (int i = 0; i < currentSlotObj.Count; i++) 
+            //slotObjectsNames[resIdx++] = currentSlotObj[i].name.Substring(0, 3);
+
         Canvas canvas = FindObjectOfType<Canvas>();
-        while (currentSlotObj[0].transform.position.y > transform.position.y) { // ori currentSlotObj.Count - 2
+        while (currentSlotObj[0].transform.position.y > transform.position.y) { 
         //while (currentSlotObj[0].transform.position.y > transform.position.y + currentSlotObj[0].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor) { // ori currentSlotObj.Count - 2
             //if (slowSpeed > speed * 0.5f) 
                 //slowSpeed *= 0.98f; // slowSpeed *= 0.98f;
@@ -124,136 +98,22 @@ public class SlotView : View {
             }
             yield return new WaitForEndOfFrame();
         }    
-        while (currentSlotObj[0].transform.position.y <= transform.position.y) { //  + currentSlotObj[0].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor
+        //while (currentSlotObj[0].transform.position.y < transform.position.y) { //  + currentSlotObj[0].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor
             //currentSlotObj[0].transform.position = transform.position;
             if (slowSpeed > speed * 0.5f) 
                 slowSpeed *= 0.6f; // slowSpeed *= 0.98f;
             for (int i = 0; i < count; i++) {
                 Vector3 newPos = new Vector3(transform.position.x, transform.position.y + currentSlotObj[i].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor * i);                
-                currentSlotObj[i].transform.position = Vector3.Lerp(currentSlotObj[i].transform.position, newPos, slowSpeed * Time.fixedDeltaTime);
+                //currentSlotObj[i].transform.position = Vector3.Lerp(currentSlotObj[i].transform.position, newPos, slowSpeed * Time.fixedDeltaTime);
+                currentSlotObj[i].transform.position = newPos;
             }
-            yield return new WaitForEndOfFrame();
-        }  
-        
-        //winScore = currentSlotObj[0].GetComponent<SlotObjectView>().reward;
-        //winScore = getWinScore();
-        //StartCoroutine(getWinScore());
-        getWinScore();
-        
-        //Debug.Log(TAG + ": SpinResult() currentSlotObj[0].name: " + currentSlotObj[0].name); 
-        //Debug.Log(TAG + ": SpinResult() currentSlotObj[0].GetComponent<SlotObjectView>().reward: " + currentSlotObj[0].GetComponent<SlotObjectView>().reward); 
-        dispatcher.Dispatch(STOP_SPIN);
-        //printResultBoard();
-    }
+            //yield return new WaitForEndOfFrame();
+        //}  
 
-    Dictionary<string, int> winItems; // at most 4 items
-    //string [] winItems;
-    //int [] winItemsCounts;
-    Dictionary<string, List<int>> winRec;
-    bool firstSlot = true;
-    float bet = 0.75f; // for temp, needs to be passed in
-    
-    void getWinScore() {
-        // 1st Slot: add all first slot items into set, keep winRecDic empty;
-        // 2nd Slot: winRecDic.Count = 0, add candidates into winRecDic;
-        // 3rd slot: update all win items in winRecDic, remove item from winItemsSet if no longer illegible for win
-        // 4th & 5th slot: update existing items to win more
+            //float waitForSeconds = spinTimer - time;
+            //yield return new WaitForSeconds(waitForSeconds);
 
-        //int winItemsCnt = slotObjCount - 1;
-        //float winVal = 0;
-        Debug.Log(TAG + ": getWinScore() firstSlot: " + firstSlot);
-        Debug.Log("winRec.Count: " + winRec.Count);
-        
-        if (firstSlot) { // 1st slot
-            for (int i = 0; i < slotObjCount - 1; i++) {
-                if (winItems.ContainsKey(res[i]))
-                    winItems[res[i]] += 1;
-                else 
-                    winItems.Add(res[i], 1);
-            }
-            firstSlot = false;
-        } else if (winItems.Count > 0 && winRec.Count == 0) { // 2nd slot
-            // record results from 1st slot
-            foreach (string key in winItems.Keys) {
-                List<int> tmp = new List<int>(winItems[key]);
-                winRec[key] = tmp;
-            }
-            // Update results according to 2nd slot results
-            UpdateWinItems();
-            foreach (string key in winRec.Keys) {
-                if (winItems.ContainsKey(key)) {
-                    winRec[key].Add(winItems[key]);
-                } else {
-                    winRec.Remove(key);
-                }
-            }
-            if (winRec.Count == 0) // 结果: (winItems.Count == 0) included
-                winScore = 0;
-        } else { // 3rd slot, 4th, 5th
-            UpdateWinItems();
-            if (winItems.Count == 0) { // buffalo or 9, 2 slots only
-                // calculate score, clear winRec dic too
-                winScore = 5f;
-            } 
-            foreach (string key in winRec.Keys) {
-                if (winItems.ContainsKey(key)) {
-                    winRec[key].Add(winItems[key]);
-                } else {
-                    winRec.Remove(key);
-                }
-            }
-            winScore = 10f;
-        }
-        //yield return winScore; //WaitForSeconds(1);
-    }
-    
-    void UpdateWinItems() {
-        Debug.Log(TAG + ": UpdateWinItems() "); 
-        Debug.Log("currentSlotObj.Count: " + currentSlotObj.Count);
-        Debug.Log("slotObjCount: " + slotObjCount);
-        int tmp = slotObjCount - 1; // slotObjCount
-        int cnt;
-        foreach (string key in winRec.Keys) {
-            cnt = 0;
-            for (int i = 0; i < tmp; i++) {
-                Debug.Log("res[i]: " + res[i]);
-                if (res[i] == key || res[i] == "wil") // for wild card
-                    cnt++;
-            }
-            if (cnt > 0) 
-                winItems[key] = cnt;
-            else
-                winItems.Remove(key);
-        }
-    }
-    bool ContainsItem(string item) {
-        // wild card, *1, *2, *3
-        for (int i = 0; i < slotObjCount - 1; i++) {
-            if (res[i] == "wil" || res[i] == item) // wild card
-                return true;
-        }
-        return false;
-    }
-    
-    public string getSlotName() {
-        Debug.Log(TAG + ": getSlotName() gameObject.name: " + gameObject.name); 
-        return gameObject.name;
-    }
-    
-    public string [] getSlotObjects() {
-        return res;
-    }
-
-    private static void DisplaySet(HashSet<int> set) {
-        System.Console.Write("{");
-        foreach (int i in set)
-            System.Console.Write(" {0}", i);
-
-        System.Console.WriteLine(" }");
-    }
-    void printResultBoard() {
-        for (int x = 0; x < slotObjCount; x++) {
-            Debug.Log("res[x]: " + res[x]);
-        }
+            spinFinished = 1;
+            //dispatcher.Dispatch(STOP_SPIN);
     }
 }

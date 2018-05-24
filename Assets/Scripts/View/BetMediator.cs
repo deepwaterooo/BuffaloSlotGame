@@ -16,6 +16,8 @@ public class BetMediator : EventMediator {
     public override void OnRegister() {
         UpdateListeners(true);
         betView.Init();
+        //Debug.Log("bet.currBet: " + bet.currBet);  // initiate bet amount
+        betView.ChangeBetText(bet.currBet);
     }
 
     public override void OnRemove() {
@@ -23,11 +25,11 @@ public class BetMediator : EventMediator {
     }
 
     private void UpdateListeners(bool value) {
-        updateBetSignal.AddListener(BetChanged); // not StopSpin signal, other signal
+        //view.dispatcher.UpdateListener(value, betView.BET_CHANGED, OnBetChanged);
+        updateBetSignal.AddListener(BetChanged); 
     }
 
     private void BetChanged() {
-        Debug.Log(TAG + ": BetChanged() bet.currBet: " + bet.currBet); 
         betView.ChangeBetText(bet.currBet); 
     }    
 }

@@ -21,6 +21,7 @@ public class StartSpinSec : MonoBehaviour, ISomeSpin {
     }
 
     public void Spin() {
+        //Debug.Log(TAG + ": Spin() start"); 
         StartSpin.Dispatch();
     }
 }

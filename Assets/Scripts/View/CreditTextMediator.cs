@@ -11,10 +11,14 @@ public class CreditTextMediator : EventMediator {
     [Inject]
     public CreditTextView view { get; set; }
     [Inject]
-    public StopSpin StopSpin { get; set; }
+    public StartSpin StartSpin { get; set; }
+    [Inject]
+    public CHANGE_CREDIT_Signal change_credit_signal { get; set; }
     
+    [Inject]
+    public IBet bet { get; set; }
     [Inject("CreditModel")]
-    public IScore credit { get; set; }
+    public ICredit credit { get; set; }
 
     public override void OnRegister() {
         UpdateListeners(true);
@@ -26,11 +30,18 @@ public class CreditTextMediator : EventMediator {
     }
 
     private void UpdateListeners(bool value) {
-        StopSpin.AddListener(CreditChanged);
+        StartSpin.AddListener(GameBetAnotherRound);
+        change_credit_signal.AddListener(CreditChanged);
     }
 
-    private void CreditChanged() {
-        //Debug.Log(TAG + ": CreditChanged() credit.Credit: " + credit.Credit); 
-        view.ChangeCreditText(credit.Score);  // credit.Credit
+    private void GameBetAnotherRound() {
+        float betLoss = bet.currBet * (-1f);
+        view.ChangeCreditText(betLoss);
+    }
+
+    private void CreditChanged(float value) {
+        float currBet = bet.currBet;
+        int multiplier = (int) (currBet / 0.75f);
+        view.ChangeCreditText(value * multiplier);
     }    
 }

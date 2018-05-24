@@ -16,7 +16,7 @@ public class BetView : View {
 
     public void Init() {
         betText = GetComponent<Text>();
-        betText.text = "NA";
+        //betText.text = "0.75";
     }
 
     public void ChangeBetText(float betAmount) {
