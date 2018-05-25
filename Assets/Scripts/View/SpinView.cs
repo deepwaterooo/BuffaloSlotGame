@@ -15,17 +15,16 @@ public class SpinView : View {
     [Inject]
     public IEventDispatcher dispatcher { get; set; }
 
-    public Signal spinButtonClicked = new Signal();
+    [Inject]
+    public Spin_Button_Clicked_Signal spinButtonClickedSignal { get; set; }
 
     private Button spinButton; 
 
     internal void Init() {
         spinButton = gameObject.GetComponent<Button>();
-        if (spinButton != null) 
-            spinButton.onClick.AddListener(() => spinButtonClickedCallback());
     }
 
-    private void spinButtonClickedCallback() {
-        spinButtonClicked.Dispatch();
+    public void SpinButtonClicked() {
+        spinButtonClickedSignal.Dispatch();
     }
 }

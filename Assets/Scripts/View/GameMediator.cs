@@ -28,17 +28,17 @@ public class GameMediator : Mediator {
     }
 
     private void UpdateListeners(bool value) {
-        view.dispatcher.UpdateListener(value, GameView.STOP_SPIN, OnSpinFinished);
-        StartSpin.AddListener(OnSpinStart);
+        view.dispatcher.UpdateListener(value, GameView.STOP_SPIN, OnSpinStop);
+        StartSpin.AddListener(OnSpinButtonClicked);
     }
 
-    private void OnSpinStart() {
-        view.WaitForSpinFinish();
+    private void OnSpinButtonClicked() {
+        view.isSlotsCurrentlySpinning();
     }
 
-    private void OnSpinFinished() {
+    private void OnSpinStop() {
         change_score_signal.Dispatch(view.WinScore);
-        change_credit_signal.Dispatch(view.DeltaCredit);        
-        OnRegister();
+        change_credit_signal.Dispatch(view.DeltaCredit);
+        StopSpin.Dispatch();
     }
 }

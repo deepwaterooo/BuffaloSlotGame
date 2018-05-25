@@ -12,7 +12,8 @@ public class SlotMediator : EventMediator {
     [Inject]
     public SlotView view { get; set; }
     [Inject]
-    public StartSpin StartSpin { get; set; }
+    public Start_Force_Stop_Signal startOrForceStopSpinSignal { get; set; }
+    //public StartSpin StartSpin { get; set; }
     [Inject]
     public StopSpin StopSpin { get; set; }
 
@@ -26,11 +27,15 @@ public class SlotMediator : EventMediator {
     }
 
     private void UpdateListeners(bool value) {
-        StartSpin.AddListener(OnSpinStart);
+        //StartSpin.AddListener(OnSpinStart);
+        startOrForceStopSpinSignal.AddListener(OnSpinStart);
+
+        StopSpin.AddListener(OnSpinStop); 
     }
-    
+
     private void OnSpinStop() {
-        StopSpin.Dispatch();
+        UpdateListeners(true); // 不起作用
+        view.GameReset();
     }
 
     private void OnSpinStart() {

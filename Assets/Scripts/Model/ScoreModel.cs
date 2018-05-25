@@ -20,6 +20,9 @@ public class ScoreModel : IScore {
 
     public void AddScore(float value) {
         _score += value;
-        //Debug.Log(TAG + ": AddScore() Score: " + Score); 
+    }
+
+    public void Reset() {
+        _score = 0f;
     }
 }

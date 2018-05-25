@@ -26,9 +26,14 @@ public class SlotsGameContext : SlotsContext {
         injectionBinder.Bind<StopSpin>().ToSingleton();                
 
         injectionBinder.Bind<UpdateBetSignal>().ToSingleton();
+        injectionBinder.Bind<Spin_Button_Clicked_Signal>().ToSingleton();
+        injectionBinder.Bind<Bet_More_Round_Signal>().ToSingleton();
+        injectionBinder.Bind<Start_Force_Stop_Signal>().ToSingleton();
+
         injectionBinder.Bind<Update_Game_Result_Signal>().ToSingleton();
         injectionBinder.Bind<CHANGE_SCORE_Signal>().ToSingleton();  
         injectionBinder.Bind<CHANGE_CREDIT_Signal>().ToSingleton();
+        injectionBinder.Bind<Game_Update_Done_Signal>().ToSingleton();
         
         mediationBinder.Bind<SlotView>().To<SlotMediator>();
         mediationBinder.Bind<GameView>().To<GameMediator>();

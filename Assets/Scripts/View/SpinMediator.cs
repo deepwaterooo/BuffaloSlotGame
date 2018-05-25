@@ -11,9 +11,10 @@ public class SpinMediator : Mediator {
     public SpinView view { get; set; }
     [Inject]
     public StartSpin StartSpin { get; set; }
-    //public SpinSignal Spin { get; set; }
     [Inject]
     public StopSpin StopSpin { get; set; }
+    [Inject]
+    public Spin_Button_Clicked_Signal spinButtonClickedSignal { get; set; }
     
     public override void OnRegister() {
         UpdateListeners(true);
@@ -26,16 +27,19 @@ public class SpinMediator : Mediator {
 
     private void UpdateListeners(bool value) {
         //view.dispatcher.UpdateListener(value, SpinView.Click_Event, OnSpinClicked);
-        view.spinButtonClicked.AddListener(OnSpinClicked);
-        StopSpin.AddListener(OnSpinStop);
+        spinButtonClickedSignal.AddListener(OnSpinClicked);
+        
+        //StopSpin.AddListener(OnSpinStop); // GameView init twice
     }
 
-    private void OnSpinClicked() { 
-        UpdateListeners(false);
+    private void OnSpinClicked() {
+		//UpdateListeners(false); // 这句话根本就不会起作用
+        //spinButtonClickedSignal.RemoveListener(OnSpinClicked); // can NOT do this
+
         StartSpin.Dispatch();
     }
 
-    private void OnSpinStop() {
+/*    private void OnSpinStop() {
         OnRegister();
-    }
+    }  */
 }

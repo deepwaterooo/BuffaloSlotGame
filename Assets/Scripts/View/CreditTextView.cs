@@ -21,8 +21,7 @@ public class CreditTextView : View {
     }
 
     public void ChangeCreditText(float credit) {
-        /*
-        Debug.Log(TAG + ": ChangeCreditText() creditText.text: " + creditText.text); 
+/*        Debug.Log(TAG + ": ChangeCreditText() creditText.text: " + creditText.text); 
         Debug.Log(TAG + ": ChangeCreditText() float.Parse(creditText.text): " + float.Parse(creditText.text));
         Debug.Log(TAG + ": ChangeCreditText() credit: " + credit); 
         */

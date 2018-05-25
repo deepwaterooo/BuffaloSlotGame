@@ -11,7 +11,7 @@ public class CreditTextMediator : EventMediator {
     [Inject]
     public CreditTextView view { get; set; }
     [Inject]
-    public StartSpin StartSpin { get; set; }
+    public Bet_More_Round_Signal betAnotherGameSignal { get; set; }
     [Inject]
     public CHANGE_CREDIT_Signal change_credit_signal { get; set; }
     
@@ -29,8 +29,8 @@ public class CreditTextMediator : EventMediator {
         UpdateListeners(false);
     }
 
-    private void UpdateListeners(bool value) {
-        StartSpin.AddListener(GameBetAnotherRound);
+    private void UpdateListeners(bool value) {             
+        betAnotherGameSignal.AddListener(GameBetAnotherRound);
         change_credit_signal.AddListener(CreditChanged);
     }
 
@@ -43,5 +43,5 @@ public class CreditTextMediator : EventMediator {
         float currBet = bet.currBet;
         int multiplier = (int) (currBet / 0.75f);
         view.ChangeCreditText(value * multiplier);
-    }    
+    }
 }

@@ -7,31 +7,49 @@ using strange.extensions.mediation.impl;
 using strange.extensions.signal.impl;
 
 public class SlotView : View {
+    private const string TAG = "SlotView";
+    
     //public static float spinTimer = 4.0f;
     public int spinFinished = 0;
-    
-    private const string TAG = "SlotView";
     
     public const string START_SPIN = "START_SPIN";
     public const string STOP_SPIN = "STOP_SPIN";
 
-    public float time = 5f;
+    public float slotSpinTime = 5f;
     public float speed = 12f;
     public int slotObjCount = 6;
     public List<GameObject> slots;
     
     [Inject]
     public IEventDispatcher dispatcher { get; set; }
-    [Inject]
-    public StopSpin StopSpin { get; set; }
+/*    [Inject]
+    public StopSpin StopSpin { get; set; }  */
     
     int index;
 
     public List<GameObject> currentSlotObj;
 
-    public void Init() {
-        index = 0;
+    private float currSlotSpinTimer = 0f;
+
+    public float CurrentSlotSpinTimer {
+        get {
+            return currSlotSpinTimer;
+        }
+    }
+
+    public void SetCurrentSlotSpinTimer(float time) {
+        currSlotSpinTimer = time;
+    }
+    
+    public void GameReset() {
+        currSlotSpinTimer = slotSpinTime;
         spinFinished = 0;
+    }
+    
+    public void Init() {
+        currSlotSpinTimer = slotSpinTime;
+        spinFinished = 0;
+        index = 0;
         currentSlotObj = new List<GameObject>();
         Canvas canvas = FindObjectOfType<Canvas>();
         slots = slots.OrderBy(r => Random.value).ToList();
@@ -63,7 +81,7 @@ public class SlotView : View {
         Canvas canvas = FindObjectOfType<Canvas>();
         if (currentSlotObj.Count < slotObjCount) 
             PlaceSlotObject(new Vector3(transform.position.x, currentSlotObj[currentSlotObj.Count - 1].transform.position.y + currentSlotObj[currentSlotObj.Count - 1].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor));
-        while (time > 0) {
+        while (currSlotSpinTimer > 0) { // slotSpinTime
             int count = currentSlotObj.Count;
             if (currentSlotObj.Count < slotObjCount) 
                 PlaceSlotObject(new Vector3(transform.position.x, currentSlotObj[currentSlotObj.Count - 1].transform.position.y + currentSlotObj[currentSlotObj.Count - 1].GetComponent<RectTransform>().sizeDelta.y * canvas.scaleFactor));
@@ -75,7 +93,7 @@ public class SlotView : View {
                 Destroy(currentSlotObj[0]);
                 currentSlotObj.RemoveAt(0);
             }
-            time -= Time.deltaTime;
+            currSlotSpinTimer -= Time.deltaTime; // slotSpinTime
             yield return new WaitForEndOfFrame();
         }
         StartCoroutine(SpinResult(curentSpeed));

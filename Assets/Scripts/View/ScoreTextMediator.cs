@@ -10,6 +10,8 @@ public class ScoreTextMediator : EventMediator { // for Win Score
     [Inject]
     public ScoreTextView view { get; set; }
     [Inject]
+    public StartSpin StartSpin { get; set; }
+    [Inject]
     public StopSpin StopSpin { get; set; } 
     [Inject]
     public IScore score { get; set; }
@@ -31,6 +33,7 @@ public class ScoreTextMediator : EventMediator { // for Win Score
     private void UpdateListeners(bool value) {
         StopSpin.AddListener(ScoreChanged);
         change_score_signal.AddListener(WinScoreAdded);
+        StartSpin.AddListener(ResetWinScore);
     }
 
     private void WinScoreAdded(float value) {
@@ -41,6 +44,11 @@ public class ScoreTextMediator : EventMediator { // for Win Score
     }
 
     private void ScoreChanged() {
-        view.ChangeScoreText(score.Score); 
+        view.ChangeScoreText(score.Score);
     }
-}
+
+    private void ResetWinScore() {
+        score.Reset(); 
+        view.ChangeScoreText(score.Score);
+    }
+ }

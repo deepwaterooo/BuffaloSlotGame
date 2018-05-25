@@ -3,6 +3,20 @@
 #+author: deepwaterooo
 
 * Updates
+- Major features/functionalities are all accomplished using *StrangeIoC* for main game play scene, including: 
+  - Update bet amount correctly and in time;
+  - Update credit values after bet loss for each game once hit the spin button which means one more game started;
+  - Calculate win score according to traditional buffalo slot game;
+  - Update remaing credits with bet loss deducted, and win credits added;
+  - When slots are spinning, hit the spin button again could force stop the spinning slots within fair amount of time; And since it's one game bet, no more 2nd bet loss deducted, and calculate afterwards win scores etc accordingly like normal spin. 
+- TODOs: 
+  - Game run smoothly for main scene, still optimization is necessary for this game, and will do that. 
+  - When calculating win score, hint text on how win score is calculated could be displayed as casinoes do, as well as some animations for win items on slots/animals and/or on win score and credit score udpating is practical and possible; Audio is also possible, spinning wheels scene will also come. 
+  - But as I continue with the project using StrangeIoC more and more easily and smoothly, I may NOT update this project any more so that later on -- not too late I hope, in Google play store, there is some well-designed well-implemented buffalo slot mobile game using *StrangeIoC* on sale~!
+  - A happily developped current game scene to share: 
+
+  [[./pic/currentGameScene.png]]
+
 - Try to figure out a way how to calculate score. So far GUI interface finished most of the design for main game interface, free game interface is still needs to work on. 
 
   [[./pic/snapshot.png]]
